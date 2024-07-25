@@ -2,12 +2,12 @@
 
 ## Overview
 
-The Lecture to Summary application allows users to upload audio or video files and receive summaries of the content. It uses a combination of transcription and summarization services to convert lectures into concise summaries.
+The Lecture to Summary application allows users to upload audio or video files and receive summaries of the content. 
 
 ## Features
 
 - Upload audio or video files up to 1 hour long.
-- Transcribe and summarize the content of the uploaded files.
+- Summarize the content of the uploaded files.
 - Save and manage generated summaries.
 
 ## Live Site
