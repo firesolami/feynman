@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Summaries</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 font-sans antialiased">
+    
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 text-white flex flex-wrap items-center justify-between">
+        <div class="flex-1">
+            <h1 class="text-3xl font-bold">Lecture To Summary</h1>
+        </div>
+        <div class="flex-1 text-center md:text-right">
+            <a href="/" class="block text-white hover:underline my-1 md:my-0">Welcome {{ user.username }}</a>
+            <a href="/summary-list" class="block text-white hover:underline my-1 md:my-0">Saved Summaries</a>
+            <a href="/logout" class="block text-white hover:underline my-1 md:my-0">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="container mx-auto mt-10 px-4 sm:px-0">
+        <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+
+            <!-- Summaries section -->
+            <section>
+                <h2 class="text-xl mb-4 font-semibold">Saved Summaries</h2>
+                <div class="space-y-4">
+                    
+                    {% for summary in summaries reversed %}
+                    <a href="/summary-details/{{ summary.id }}" class="block">
+                        <div class="border border-gray-300 p-4 rounded-lg hover:bg-gray-50 transition-colors">
+                            <h3 class="text-lg font-semibold">{{ summary.summary_title }}</h3>
+                            <p>{{ summary.generated_content|truncatechars:80 }}</p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                    
+                </div>
+            </section>
+
+        </div>
+    </div>
+</body>
+</html>

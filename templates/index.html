@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture to Summary</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to { 
+                transform: rotate(360deg);
+            }
+        }
+         
+        @-webkit-keyframes rotate {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to { 
+                -webkit-transform: rotate(360deg);
+            }
+        }
+        
+        .load {
+            width: 100px;
+            height: 100px;
+            margin: 110px auto 0;
+            border: solid 10px #8822aa;
+            border-radius: 50%;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            -webkit-animation-name: rotate; 
+            -webkit-animation-duration: 1.0s; 
+            -webkit-animation-iteration-count: infinite;
+            -webkit-animation-timing-function: linear;
+            animation-name: rotate; 
+            animation-duration: 1.0s; 
+            animation-iteration-count: infinite;
+            animation-timing-function: linear; 
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-gray-100 font-sans antialiased">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 text-white flex flex-wrap items-center justify-between">
+        <div class="flex-1">
+            <h1 class="text-3xl font-bold">Lecture to Summary</h1>
+        </div>
+        <div class="flex-1 text-center md:text-right">
+            <a href="/" class="block text-white hover:underline my-1 md:my-0">Welcome {{ user.username }}</a>
+            <a href="/summary-list" class="block text-white hover:underline my-1 md:my-0">Saved Summaries</a>
+            <a href="/logout" class="block text-white hover:underline my-1 md:my-0">Logout</a>
+        </div>
+    </nav>
+
+    <br>
+    <br>
+
+    <!-- Main -->
+    <div class="flex-grow container mx-auto mt-10 px-4 sm:px-0">
+        <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md transition-transform transform hover:scale-105 flex flex-col">
+
+            <!-- Introduction section -->
+            <div class="text-center">
+                <h2 class="text-2xl font-semibold mb-4">Welcome to the Lecture to Summary Tool</h2>
+                <p class="text-gray-700">
+                    Summarize lectures or talks effortlessly. Upload up to 1 hour long video or audio files and get a summary generated!
+                </p>
+            </div>
+
+            <br>
+
+            <!-- Media Upload section -->
+            <div>
+                <h2 class="text-xl mb-4 font-semibold">Upload File</h2>
+                <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                  <input type="file" id="mediaUpload" accept="audio/*,video/*" class="flex-grow p-2 border border-blue-400 rounded-md">
+                  <button id="generateSummaryButton" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">Generate Summary</button>
+                </div>
+              </div>
+
+            <!-- Section for loading circle -->
+            <div style="display: none;" id="loading-circle" class="load"></div>
+
+            <!-- Generated Summary Display Section -->
+            <section class="mt-10 flex-grow">
+              <h2 class="text-xl mb-4 font-semibold">Generated Summary</h2>
+              <div id="summaryContent" class="mt-2 text-gray-700 space-y-4"></div>
+            </section>
+
+            <section class="mt-10 flex-grow">
+                <!-- Save button and input field -->
+                <div id="saveSummarySection" style="display: none;">
+                    <input type="text" id="summaryNameInput" placeholder="Enter summary name" class="p-2 border border-gray-400 rounded-md mb-2">
+                    <button id="saveSummaryButton" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">Save</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('generateSummaryButton').addEventListener('click', async () => {
+            const mediaFile = document.getElementById('mediaUpload').files[0];
+            const summaryContent = document.getElementById('summaryContent');
+
+            if (mediaFile) {
+                document.getElementById('loading-circle').style.display = 'block';
+                document.getElementById('saveSummarySection').style.display = 'none';
+                summaryContent.innerHTML = ''; // Clear previous content
+
+                const endpointUrl = '/generate-summary/';
+
+                try {
+                    const formData = new FormData();
+                    formData.append('media', mediaFile);
+
+                    const response = await fetch(endpointUrl, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    const formattedContent = data.content.replace(/\n{2,}/g, "<br><br>").replace(/\n/g, " ");
+                    summaryContent.innerHTML = formattedContent;
+                } catch (error) {
+                    console.error("Error occurred:", error);
+                    alert("Something went wrong. Please try again later.");
+                }
+
+                document.getElementById('loading-circle').style.display = 'none';
+                if (summaryContent.innerHTML !== '') {
+                    document.getElementById('saveSummarySection').style.display = 'block';
+                }
+
+                document.getElementById('saveSummaryButton').addEventListener('click', async () => {
+                    const summaryName = document.getElementById('summaryNameInput').value;
+                    document.getElementById('saveSummarySection').style.display = 'none';
+                    if (summaryName) {
+                        const endpointUrl = '/save-summary/';
+                        const formData = new FormData();
+                        formData.append('text', summaryName);
+                        const response = await fetch(endpointUrl, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        alert("Summary saved successfully!");
+                    }
+                });
+            } else {
+                alert("Please upload a media file.");
+            }
+        });
+    </script>
+</body>
+</html>
