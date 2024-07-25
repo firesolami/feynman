@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Lecture to Summary application allows users to upload audio or video files and receive summaries of the content. 
+The Lecture to Summary application allows users to upload audio or video lecture files and receive summaries of the content. 
 
 ## Features
 
