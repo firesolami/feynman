@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
@@ -8,9 +10,10 @@ from .models import Summary
 import os
 import assemblyai as aai
 import google.generativeai as genai
-from azure.storage.blob import BlobServiceClient
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
-# Create your views here.
 @login_required
 def index(request):
     return render(request, 'index.html')
@@ -23,26 +26,19 @@ def generate_summary(request):
         if not is_valid_media_file(uploaded_file):
             return JsonResponse({'error': 'Invalid file type. Only audio and video files are allowed.'}, status=400)
 
-        # Determine the output file path (in the media folder)
-        username = request.user.username
-        filename = f"{username}_media"
-        
-        # Initialize Azure Blob Storage client
-        connection_string = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
-        container_name = "lecturetosummary-blob"
-        blob_service_client = BlobServiceClient.from_connection_string(connection_string)
-        container_client = blob_service_client.get_container_client(container_name)
+        cloudinary.config( 
+            cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'), 
+            api_key = os.getenv('CLOUDINARY_API_KEY'), 
+            api_secret = os.getenv('CLOUDINARY_API_SECRET')
+        )
 
-        # Upload the file directly to Azure Blob Storage
-        blob_client = container_client.upload_blob(name=filename, data=uploaded_file)
-
-        uploaded_blob_url = f"https://{blob_service_client.account_name}.blob.core.windows.net/{container_name}/{filename}"
+        response = cloudinary.uploader.upload(uploaded_file, resource_type="video")
 
         aai.settings.api_key = os.getenv('ASSEMBLYAI_API_KEY')
 
         transcriber = aai.Transcriber()
-        transcript = transcriber.transcribe(uploaded_blob_url)
-        blob_client.delete_blob()
+        transcript = transcriber.transcribe(response["secure_url"])
+        cloudinary.uploader.destroy(response["public_id"])
         summary_content = generate_summary_from_transcription(transcript.text)
         request.session['generated_content'] = summary_content
 
