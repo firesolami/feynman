@@ -12,7 +12,7 @@ The Lecture to Summary application allows users to upload audio or video lecture
 
 ## Live Site
 
-You can view the live application at [lecturetosummary.azurewebsites.net](https://lecturetosummary.azurewebsites.net).
+You can view the live application at [lecturetosummary.onrender.com](https://lecturetosummary.onrender.com).
 
 ## Installation
 
@@ -21,7 +21,7 @@ You can view the live application at [lecturetosummary.azurewebsites.net](https:
 - Python 3.6+
 - Django 3.2+
 - PostgreSQL
-- Azure Blob Storage
+- Cloudinary
 - AssemblyAI
 - Google Generative AI
 
@@ -56,8 +56,9 @@ You can view the live application at [lecturetosummary.azurewebsites.net](https:
    POSTGRES_USER=your_postgres_user
    POSTGRES_PASSWORD=your_postgres_password
    POSTGRES_DATABASE=your_postgres_database
-   AZURE_STORAGE_CONNECTION_STRING=your_azure_storage_connection_string
-   ASSEMBLYAI_API_KEY=your_assemblyai_api_key
+   CLOUDINARY_API_KEY=your_cloudinary_api_key
+   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+   CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name  ASSEMBLYAI_API_KEY=your_assemblyai_api_key
    GENAI_API_KEY=your_genai_api_key
    SECRET_KEY=your_secret_key
    ```
@@ -79,22 +80,6 @@ You can view the live application at [lecturetosummary.azurewebsites.net](https:
    ```bash
    python manage.py runserver
    ```
-
-## Deployment
-
-To redeploy the application to Azure:
-
-1. **Commit your changes and push to the repository:**
-
-   ```bash
-   git add .
-   git commit -m "Your commit message"
-   git push origin main
-   ```
-
-2. **Deploy the application:**
-
-   Follow the [Azure deployment documentation](https://docs.microsoft.com/en-us/azure/app-service/quickstart-python) to deploy the latest code to Azure.
 
 ## Contributing
 
