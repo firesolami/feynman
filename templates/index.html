@@ -51,7 +51,7 @@
             <h1 class="text-3xl font-bold">Lecture to Summary</h1>
         </div>
         <div class="flex-1 text-center md:text-right">
-            <a href="/" class="block text-white hover:underline my-1 md:my-0">Welcome {{ user.username }}</a>
+            <a href="/" class="block text-white hover:underline my-1 md:my-0">Welcome, {{ user.username }}</a>
             <a href="/summary-list" class="block text-white hover:underline my-1 md:my-0">Saved Summaries</a>
             <a href="/logout" class="block text-white hover:underline my-1 md:my-0">Logout</a>
         </div>
@@ -125,7 +125,7 @@
 
                     const data = await response.json();
 
-                    const formattedContent = data.content.replace(/\n{2,}/g, "<br><br>").replace(/\n/g, " ");
+                    const formattedContent = data.content.replace(/\n{2,}/g, "<br>").replace(/\n/g, " ").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
                     summaryContent.innerHTML = formattedContent;
                 } catch (error) {
                     console.error("Error occurred:", error);

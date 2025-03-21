@@ -15,7 +15,7 @@
             <h1 class="text-3xl font-bold">Lecture To Summary</h1>
         </div>
         <div class="flex-1 text-center md:text-right">
-            <a href="/" class="block text-white hover:underline my-1 md:my-0">Welcome {{ user.username }}</a>
+            <a href="/" class="block text-white hover:underline my-1 md:my-0">Welcome, {{ user.username }}</a>
             <a href="/summary-list" class="block text-white hover:underline my-1 md:my-0">Saved Summaries</a>
             <a href="/logout" class="block text-white hover:underline my-1 md:my-0">Logout</a>
         </div>
@@ -29,12 +29,22 @@
                 <h2 class="text-xl mb-4 font-semibold">Summary Details</h2>
                 <div class="border border-gray-300 p-4 rounded-lg">
                     <h3 class="text-lg font-semibold">{{ summary_detail.summary_title }}</h3>
-                    <p class="text-gray-700">{{ summary_detail.generated_content }}</p>
+                    <p class="text-gray-700" id="summaryContent">{{ summary_detail.generated_content }}</p>
                     <hr class="my-4 border-gray-300">
                     <a href="/delete-summary/{{ summary_detail.id }}" class="text-red-600 hover:underline">Delete Summary</a>
                 </div>
             </section>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const summaryContent = document.getElementById('summaryContent');
+
+            if (summaryContent) {
+                const formattedContent = summaryContent.innerHTML.replace(/\n{2,}/g, "<br>").replace(/\n/g, " ").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+                summaryContent.innerHTML = formattedContent;
+            }
+        })
+    </script>
 </body>
 </html>

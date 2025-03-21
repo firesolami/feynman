@@ -15,7 +15,7 @@
             <h1 class="text-3xl font-bold">Lecture To Summary</h1>
         </div>
         <div class="flex-1 text-center md:text-right">
-            <a href="/" class="block text-white hover:underline my-1 md:my-0">Welcome {{ user.username }}</a>
+            <a href="/" class="block text-white hover:underline my-1 md:my-0">Welcome, {{ user.username }}</a>
             <a href="/summary-list" class="block text-white hover:underline my-1 md:my-0">Saved Summaries</a>
             <a href="/logout" class="block text-white hover:underline my-1 md:my-0">Logout</a>
         </div>
@@ -34,7 +34,7 @@
                     <a href="/summary-details/{{ summary.id }}" class="block">
                         <div class="border border-gray-300 p-4 rounded-lg hover:bg-gray-50 transition-colors">
                             <h3 class="text-lg font-semibold">{{ summary.summary_title }}</h3>
-                            <p>{{ summary.generated_content|truncatechars:80 }}</p>
+                            <p id="summaryContent">{{ summary.generated_content|truncatechars:80 }}</p>
                         </div>
                     </a>
                     {% endfor %}
@@ -44,5 +44,15 @@
 
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const summaryContent = document.getElementById('summaryContent');
+
+            if (summaryContent) {
+                const formattedContent = summaryContent.innerHTML.replace(/\n/g, " ").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+                summaryContent.innerHTML = formattedContent;
+            }
+        })
+    </script>
 </body>
 </html>
