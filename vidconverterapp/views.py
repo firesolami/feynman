@@ -138,3 +138,6 @@ def user_signup(request):
 def user_logout(request):
     logout(request)
     return redirect('/')
+
+def ping(request):
+    return JsonResponse({'data': 'pong'})

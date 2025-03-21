@@ -11,4 +11,5 @@ urlpatterns = [
     path('summary-list/', views.summary_list, name='summary-list'),
     path('summary-details/<int:pk>', views.summary_details, name='summary-details'),
     path('delete-summary/<int:pk>', views.delete_summary, name='delete-summary'),
+    path('ping/', views.ping, name='ping'),
 ]
