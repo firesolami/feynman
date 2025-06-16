@@ -27,10 +27,7 @@ def generate_summary(request):
 
         if not is_valid_media_file(uploaded_file):
             return JsonResponse(
-                {
-                    "error": "Invalid file type. "
-                    "Only audio and video files are allowed."
-                },
+                {"error": "Invalid file type. " "Only audio and video files are allowed."},
                 status=400,
             )
 
@@ -57,9 +54,7 @@ def generate_summary(request):
 
 def is_valid_media_file(file):
     valid_mime_types = ["audio/", "video/"]
-    return any(
-        file.content_type.startswith(mime_type) for mime_type in valid_mime_types
-    )
+    return any(file.content_type.startswith(mime_type) for mime_type in valid_mime_types)
 
 
 @csrf_exempt
@@ -93,21 +88,105 @@ def generate_summary_from_transcription(transcription):
 
     genai.configure(api_key=API_KEY)
 
-    text_to_summarize = "Based on the following transcript from a "
-    "lecture audio, write a lecture summary, write it based on the "
-    "transcript, make it look like a summary with all the key points "
-    "mentioned, do not add points that were not mentioned in the transcript,"
-    " I repeat do not add points that were not mentioned in the transcript. "
-    "List out everything said in the transcript first then show the summary"
-    f" separately:\n\n{transcription}\n\n Summary:"
+    text_to_summarize = (
+        "Based on the following transcript from a "
+        "lecture audio, write a lecture summary, write it based on the "
+        "transcript, make it look like a summary with all the key points "
+        "mentioned, do not add points that were not mentioned in the transcript, "
+        "List out everything said in the transcript first then show the summary "
+        f"separately:\n\n{transcription}\n\n Summary:"
+    )
 
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.0-flash")
 
     response = model.generate_content(text_to_summarize)
 
     generated_content = response.text
 
-    return generated_content.replace("#", "")
+    print(generated_content)
+
+    return format_text_for_frontend(generated_content)
+
+
+def format_text_for_frontend(text):
+    # Remove markdown-style headers
+    text = text.replace("#", "")
+
+    # Split into lines for processing
+    lines = text.split("\n")[0:]
+    formatted_lines = []
+    current_list_items = []
+
+    for line in lines:
+        line = line.strip()
+
+        # Skip empty lines but preserve them for paragraph breaks
+        if not line:
+            # If we have accumulated list items, close the list
+            if current_list_items:
+                formatted_lines.append('<ul style="margin-bottom: 15px; padding-left: 20px; list-style-type: disc;">')
+                formatted_lines.extend(current_list_items)
+                formatted_lines.append("</ul>")
+                current_list_items = []
+            formatted_lines.append("")
+            continue
+
+        # Handle bold text (markdown style)
+        if line.startswith("**"):
+            bold_text = line.strip().replace("**", "")
+            formatted_lines.append(f'<strong style="font-weight: bold;">{bold_text}</strong>')
+
+        # Handle section headers (lines ending with colon and typically capitalized)
+        elif line.endswith(":") and len(line) > 3 and any(word[0].isupper() for word in line.split() if word):
+            # Close any open list first
+            if current_list_items:
+                formatted_lines.append('<ul style="margin-bottom: 15px; padding-left: 20px; list-style-type: disc;">')
+                formatted_lines.extend(current_list_items)
+                formatted_lines.append("</ul>")
+                current_list_items = []
+            formatted_lines.append(f'<h4 style="margin-top: 20px; margin-bottom: 10px; font-size: 1.2em;">{line}</h4>')
+
+        # Handle bullet points (lines starting with * or -)
+        elif line.startswith("* ") or line.startswith("- "):
+            bullet_text = line[2:].strip()
+            current_list_items.append(f'<li style="margin-bottom: 8px; line-height: 1.6;">{bullet_text}</li>')
+
+        # Handle numbered points (1. 2. etc.)
+        elif len(line) > 3 and line[0:3].replace(".", "").replace(")", "").replace(" ", "").isdigit() and (". " in line or ") " in line):
+            # Close any open unordered list first
+            if current_list_items:
+                formatted_lines.append('<ul style="margin-bottom: 15px; padding-left: 20px; list-style-type: disc;">')
+                formatted_lines.extend(current_list_items)
+                formatted_lines.append("</ul>")
+                current_list_items = []
+            formatted_lines.append(f'<p style="margin-bottom: 10px; line-height: 1.6; padding-left: 20px;"><strong>{line}</strong></p>')
+
+        # Regular paragraphs
+        else:
+            # Close any open list first
+            if current_list_items:
+                formatted_lines.append('<ul style="margin-bottom: 15px; padding-left: 20px; list-style-type: disc;">')
+                formatted_lines.extend(current_list_items)
+                formatted_lines.append("</ul>")
+                current_list_items = []
+            formatted_lines.append(f'<p style="margin-bottom: 15px; line-height: 1.6; text-align: justify;">{line}</p>')
+
+    # Close any remaining open list
+    if current_list_items:
+        formatted_lines.append('<ul style="margin-bottom: 15px; padding-left: 20px; list-style-type: disc;">')
+        formatted_lines.extend(current_list_items)
+        formatted_lines.append("</ul>")
+
+    # Join lines and clean up
+    formatted_text = "\n".join(formatted_lines)
+
+    # Remove excessive empty paragraphs
+    formatted_text = formatted_text.replace('<p style="margin-bottom: 15px; line-height: 1.6; text-align: justify;"></p>', "")
+
+    # Add overall container styling
+    formatted_text = f'<div style="font-family: system-ui, -apple-system, sans-serif; color: #374151; max-width: 100%; line-height: 1.6;">{formatted_text}</div>'
+
+    return formatted_text
 
 
 def summary_list(request):
@@ -118,9 +197,7 @@ def summary_list(request):
 def summary_details(request, pk):
     summary_detail = Summary.objects.get(id=pk)
     if request.user == summary_detail.user:
-        return render(
-            request, "summary-detail.html", {"summary_detail": summary_detail}
-        )
+        return render(request, "summary-detail.html", {"summary_detail": summary_detail})
     else:
         return redirect("/")
 

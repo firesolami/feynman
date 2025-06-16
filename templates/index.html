@@ -121,12 +121,9 @@
                     const response = await fetch(endpointUrl, {
                         method: 'POST',
                         body: formData
-                    });
+                    });                    const data = await response.json();
 
-                    const data = await response.json();
-
-                    const formattedContent = data.content.replace(/\n{2,}/g, "<br>").replace(/\n/g, " ").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
-                    summaryContent.innerHTML = formattedContent;
+                    summaryContent.innerHTML = data.content;
                 } catch (error) {
                     console.error("Error occurred:", error);
                     alert("Something went wrong. Please try again later.");

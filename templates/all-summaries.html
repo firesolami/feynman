@@ -28,31 +28,17 @@
             <!-- Summaries section -->
             <section>
                 <h2 class="text-xl mb-4 font-semibold">Saved Summaries</h2>
-                <div class="space-y-4">
-
-                    {% for summary in summaries reversed %}
+                <div class="space-y-4">                    {% for summary in summaries reversed %}
                     <a href="/summary-details/{{ summary.id }}" class="block">
                         <div class="border border-gray-300 p-4 rounded-lg hover:bg-gray-50 transition-colors">
                             <h3 class="text-lg font-semibold">{{ summary.summary_title }}</h3>
-                            <p id="summaryContent">{{ summary.generated_content|truncatechars:80 }}</p>
+                            <p class="text-gray-600">{{ summary.generated_content|striptags|truncatechars:100 }}</p>
                         </div>
                     </a>
                     {% endfor %}
 
                 </div>
-            </section>
-
-        </div>
+            </section>        </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const summaryContent = document.getElementById('summaryContent');
-
-            if (summaryContent) {
-                const formattedContent = summaryContent.innerHTML.replace(/\n/g, " ").replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
-                summaryContent.innerHTML = formattedContent;
-            }
-        })
-    </script>
 </body>
 </html>
