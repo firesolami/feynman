@@ -1,8 +1,8 @@
-# Lecture to Summary
+# feynman
 
 ## Overview
 
-The Lecture to Summary application allows users to upload audio or video lecture files and receive summaries of the content. 
+feynman allows users to upload audio or video lecture files and receive summaries of the content. 
 
 ## Features
 
@@ -49,19 +49,7 @@ You can view the live application at [lecturetosummary.onrender.com](https://lec
 
 4. **Set up environment variables:**
 
-   Create a `.env` file in the root directory of the project and add the following variables:
-
-   ```plaintext
-   POSTGRES_HOST=your_postgres_host
-   POSTGRES_USER=your_postgres_user
-   POSTGRES_PASSWORD=your_postgres_password
-   POSTGRES_DATABASE=your_postgres_database
-   CLOUDINARY_API_KEY=your_cloudinary_api_key
-   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-   CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name  ASSEMBLYAI_API_KEY=your_assemblyai_api_key
-   GENAI_API_KEY=your_genai_api_key
-   SECRET_KEY=your_secret_key
-   ```
+   Create a `.env` file in the root directory of the project, copy and paste the content of the `.env.example` file into it and edit the variables accordingly.
 
 5. **Apply migrations:**
 
