@@ -10,6 +10,6 @@ google-generativeai==0.5.4
 googleapis-common-protos==1.63.0
 gunicorn
 httpx==0.27.0
-psycopg2-binary==2.9.9
+psycopg2-binary>=2.9.10
 python-dotenv
 requests==2.31.0
