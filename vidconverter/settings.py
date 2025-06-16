@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
 
 PORT = os.getenv("PORT", "10000")
-ALLOWED_HOSTS = ['lecturetosummary.onrender.com']
+ALLOWED_HOSTS = ['feynman-xq7s.onrender.com']
 
 
 # Application definition

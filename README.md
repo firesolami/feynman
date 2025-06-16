@@ -12,7 +12,7 @@ feynman allows users to upload audio or video lecture files and receive summarie
 
 ## Live Site
 
-You can view the live application at [lecturetosummary.onrender.com](https://lecturetosummary.onrender.com).
+You can view the live application [here](https://feynman-xq7s.onrender.com) 🚀
 
 ## Installation
 
