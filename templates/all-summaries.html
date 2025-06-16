@@ -8,7 +8,7 @@
 </head>
 
 <body class="bg-gray-100 font-sans antialiased">
-    
+
     <!-- Navbar -->
     <nav class="bg-blue-600 p-4 text-white flex flex-wrap items-center justify-between">
         <div class="flex-1">
@@ -29,7 +29,7 @@
             <section>
                 <h2 class="text-xl mb-4 font-semibold">Saved Summaries</h2>
                 <div class="space-y-4">
-                    
+
                     {% for summary in summaries reversed %}
                     <a href="/summary-details/{{ summary.id }}" class="block">
                         <div class="border border-gray-300 p-4 rounded-lg hover:bg-gray-50 transition-colors">
@@ -38,7 +38,7 @@
                         </div>
                     </a>
                     {% endfor %}
-                    
+
                 </div>
             </section>
 

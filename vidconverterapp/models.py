@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Summary(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     summary_title = models.CharField(max_length=300)

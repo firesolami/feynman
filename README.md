@@ -2,7 +2,7 @@
 
 ## Overview
 
-feynman allows users to upload audio or video lecture files and receive summaries of the content. 
+feynman allows users to upload audio or video lecture files and receive summaries of the content.
 
 ## Features
 

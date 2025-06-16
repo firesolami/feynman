@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class VidconverterappConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'vidconverterapp'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "vidconverterapp"
