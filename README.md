@@ -72,3 +72,8 @@ You can view the live application [here](https://feynman-xq7s.onrender.com) 🚀
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any enhancements or fixes.
+
+## TODO
+
+- Add chatbot features on generated summaries
+- Add wysiwyg editor
