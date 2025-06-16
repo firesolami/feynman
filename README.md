@@ -77,3 +77,4 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 - Add chatbot features on generated summaries
 - Add wysiwyg editor
+- Add favicon
