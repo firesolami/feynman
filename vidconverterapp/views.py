@@ -103,7 +103,7 @@ def generate_summary_from_transcription(transcription):
 
     generated_content = response.text
 
-    print(generated_content)
+    # print(generated_content)
 
     return format_text_for_frontend(generated_content)
 
